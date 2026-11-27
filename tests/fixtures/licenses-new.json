@@ -1,0 +1,143 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "dual",
+      "version": "1.0",
+      "purl": "pkg:cargo/dual@1.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR MIT"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lowercase-id",
+      "version": "1.0",
+      "purl": "pkg:npm/lowercase-id@1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "id-to-expression",
+      "version": "1.0",
+      "purl": "pkg:npm/id-to-expression@1.0",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "entry-order",
+      "version": "1.0",
+      "purl": "pkg:npm/entry-order@1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        },
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "exception",
+      "version": "1.0",
+      "purl": "pkg:maven/org.example/exception@1.0",
+      "licenses": [
+        {
+          "expression": "GPL-2.0-only WITH Classpath-exception-2.0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "operator",
+      "version": "1.0",
+      "purl": "pkg:cargo/operator@1.0",
+      "licenses": [
+        {
+          "expression": "MIT OR Apache-2.0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "concluded",
+      "version": "1.0",
+      "purl": "pkg:npm/concluded@1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "acknowledgement": "declared"
+          }
+        },
+        {
+          "license": {
+            "id": "GPL-3.0-only",
+            "acknowledgement": "concluded"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "named",
+      "version": "1.0",
+      "purl": "pkg:generic/named@1.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "Acme License"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "dropped",
+      "version": "1.0",
+      "purl": "pkg:npm/dropped@1.0"
+    },
+    {
+      "type": "library",
+      "name": "unparsed",
+      "version": "1.0",
+      "purl": "pkg:npm/unparsed@1.0",
+      "licenses": [
+        {
+          "expression": "MIT/X11 or BSD"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nested-parens",
+      "version": "1.0",
+      "purl": "pkg:cargo/nested-parens@1.0",
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause AND (Zlib OR MIT OR Apache-2.0)"
+        }
+      ]
+    }
+  ]
+}

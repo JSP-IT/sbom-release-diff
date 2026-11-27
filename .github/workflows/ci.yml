@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Superseded pull request runs are cancelled; pushes to main always finish.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: never
+
+jobs:
+  lint:
+    name: fmt and Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+
+  test:
+    name: test (${{ matrix.os }}, ${{ matrix.toolchain }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        toolchain: [stable, "1.85"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - run: cargo test --locked
+
+  dependencies:
+    name: dependency licenses and advisories
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check advisories bans licenses sources
+
+  # Release-profile binaries with checksums, uploaded as workflow artifacts so
+  # reviewers can try a pull request. Nothing is published.
+  binaries:
+    needs: [lint, test]
+    uses: ./.github/workflows/build-binaries.yml
+    with:
+      ref: ${{ github.sha }}
+      label: ${{ github.sha }}

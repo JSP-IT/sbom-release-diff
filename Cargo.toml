@@ -1,0 +1,32 @@
+[package]
+name = "sbom-release-diff"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Deterministic, offline comparison of two CycloneDX JSON SBOMs for release review"
+license = "Apache-2.0"
+repository = "https://github.com/JSP-IT/sbom-release-diff"
+readme = "README.md"
+keywords = ["sbom", "cyclonedx", "diff", "supply-chain", "ci"]
+categories = ["command-line-utilities", "development-tools"]
+include = [
+    "src/**",
+    "schema/**",
+    "Cargo.toml",
+    "Cargo.lock",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "CHANGELOG.md",
+]
+
+[dependencies]
+clap = { version = "4", default-features = false, features = ["std", "derive", "help", "usage", "error-context"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+codegen-units = 1
+lto = true
+strip = true
+panic = "abort"
