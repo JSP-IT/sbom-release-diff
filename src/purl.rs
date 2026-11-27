@@ -185,6 +185,10 @@ fn percent_decode(input: &str) -> Result<String, &'static str> {
             let hex = bytes
                 .get(i + 1..i + 3)
                 .ok_or("purl has an incomplete percent escape")?;
+            // from_str_radix alone would also accept a sign such as "+A".
+            if !hex.iter().all(u8::is_ascii_hexdigit) {
+                return Err("purl has an invalid percent escape");
+            }
             let hex = std::str::from_utf8(hex).map_err(|_| "purl has an invalid percent escape")?;
             let byte =
                 u8::from_str_radix(hex, 16).map_err(|_| "purl has an invalid percent escape")?;
@@ -304,6 +308,8 @@ mod tests {
             "pkg:npm/x?a=1&a=2",
             "pkg:npm/%zz",
             "pkg:npm/%ff",
+            "pkg:generic/foo%+Abar@1",
+            "pkg:generic/foo%-1",
         ] {
             assert!(Purl::parse(bad).is_err(), "{bad} should be rejected");
         }

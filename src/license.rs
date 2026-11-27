@@ -23,11 +23,18 @@ pub struct LicenseEntry {
 }
 
 impl LicenseEntry {
-    /// `license.id`: SPDX identifiers are compared case-insensitively.
+    /// `license.id`: SPDX identifiers are compared case-insensitively. An id
+    /// that is not a single identifier (for example one containing spaces or
+    /// operators) gets its own key, so it cannot equal a parsed expression.
     pub fn from_id(id: &str) -> Self {
         let display = id.trim().to_owned();
+        let canonical = if is_valid_id(&display) {
+            format!("expr:{}", display.to_ascii_lowercase())
+        } else {
+            format!("id:{display}")
+        };
         Self {
-            canonical: format!("expr:{}", display.to_ascii_lowercase()),
+            canonical,
             display,
             parsed: true,
         }
@@ -339,6 +346,14 @@ mod tests {
         let a = LicenseEntry::from_expression("MIT  and   Apache-2.0");
         assert!(!a.parsed);
         assert_eq!(a.canonical, "text:MIT and Apache-2.0");
+    }
+
+    #[test]
+    fn malformed_id_does_not_equal_an_expression() {
+        assert_ne!(
+            LicenseEntry::from_id("apache-2.0 or mit").canonical,
+            LicenseEntry::from_expression("MIT OR Apache-2.0").canonical
+        );
     }
 
     #[test]

@@ -182,6 +182,37 @@ fn swapping_inputs_swaps_added_and_removed() {
     );
 }
 
+fn in_memory_report(old: &str, new: &str) -> sbom_release_diff::report::Report {
+    let load = |file: &str, text: &str| sbom_release_diff::LoadedBom {
+        file: file.to_owned(),
+        bom: sbom_release_diff::parse_document(text.as_bytes()).unwrap(),
+    };
+    sbom_release_diff::build_report(&load("old.json", old), &load("new.json", new), &[])
+}
+
+fn bom_with(components: &[&str]) -> String {
+    format!(
+        r#"{{"bomFormat":"CycloneDX","specVersion":"1.6","components":[{}]}}"#,
+        components.join(",")
+    )
+}
+
+#[test]
+fn merged_duplicates_do_not_depend_on_input_order() {
+    // Same declaration written two ways: merged, and the reported text must
+    // not depend on which entry came first.
+    let id = r#"{"type":"library","name":"x","purl":"pkg:npm/x@1.0","licenses":[{"license":{"id":"MIT"}}]}"#;
+    let expr =
+        r#"{"type":"library","name":"x","purl":"pkg:npm/x@1.0","licenses":[{"expression":"mit"}]}"#;
+    let empty = bom_with(&[]);
+    let forward = in_memory_report(&bom_with(&[id, expr]), &empty);
+    let backward = in_memory_report(&bom_with(&[expr, id]), &empty);
+    let json = sbom_release_diff::render::json;
+    assert_eq!(json(&forward), json(&backward));
+    assert_eq!(forward.removed.len(), 1);
+    assert_eq!(forward.warnings[0].count, Some(2));
+}
+
 // ---------------------------------------------------------------- duplicates
 
 #[test]
@@ -429,6 +460,36 @@ fn hostile_content_is_neutralized() {
     let long = format!("long-{}", "a".repeat(600));
     assert!(names.contains(&long.as_str()));
     assert!(!diff(&old, &new, &[]).stdout.contains(&long));
+}
+
+#[test]
+fn placeholder_lookalike_values_are_distinguishable() {
+    let old = bom_with(&[r#"{"type":"library","name":"x","purl":"pkg:npm/x"}"#]);
+    let new = bom_with(&[r#"{"type":"library","name":"x","purl":"pkg:npm/x@(none)"}"#]);
+    let report = in_memory_report(&old, &new);
+
+    let text = sbom_release_diff::render::text(&report);
+    assert!(
+        text.contains("~ pkg:npm/x  (none) -> \\(none)"),
+        "missing version and literal \"(none)\" must differ:\n{text}"
+    );
+    let md = sbom_release_diff::render::markdown(&report);
+    assert!(md.contains("| (none) | ` (none) ` |"), "{md}");
+}
+
+#[test]
+fn license_change_shows_both_versions_when_they_differ() {
+    let old = bom_with(&[
+        r#"{"type":"library","name":"x","purl":"pkg:npm/x@1.0","licenses":[{"license":{"id":"MIT"}}]}"#,
+    ]);
+    let new = bom_with(&[
+        r#"{"type":"library","name":"x","purl":"pkg:npm/x@2.0","licenses":[{"license":{"id":"GPL-3.0-only"}}]}"#,
+    ]);
+    let text = sbom_release_diff::render::text(&in_memory_report(&old, &new));
+    assert!(
+        text.contains("! pkg:npm/x  1.0 -> 2.0: [MIT] -> [GPL-3.0-only]"),
+        "{text}"
+    );
 }
 
 // ---------------------------------------------------------------- invalid input

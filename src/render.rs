@@ -62,8 +62,43 @@ fn component_label(c: &ComponentRef) -> String {
     )
 }
 
-fn version(v: Option<&str>) -> &str {
-    v.unwrap_or(NONE)
+/// A sanitized SBOM value for text output. A leading '(' is escaped as
+/// `\(` so a value can never look like a placeholder such as `(none)`. The
+/// escape is unambiguous because literal backslashes are always doubled.
+fn text_value(value: &str) -> String {
+    let shown = display(value);
+    if shown.starts_with('(') {
+        format!("\\{shown}")
+    } else {
+        shown
+    }
+}
+
+fn text_version(v: Option<&str>) -> String {
+    v.map_or_else(|| NONE.to_owned(), text_value)
+}
+
+/// `old -> new` when the versions differ, otherwise the single version.
+fn text_versions(old: Option<&str>, new: Option<&str>) -> String {
+    if old == new {
+        text_version(new)
+    } else {
+        format!("{} -> {}", text_version(old), text_version(new))
+    }
+}
+
+/// In Markdown, SBOM values are always code spans and placeholders never
+/// are, so the two cannot be confused.
+fn md_version(v: Option<&str>) -> String {
+    v.map_or_else(|| NONE.to_owned(), markdown_code)
+}
+
+fn md_versions(old: Option<&str>, new: Option<&str>) -> String {
+    if old == new {
+        md_version(new)
+    } else {
+        format!("{} -> {}", md_version(old), md_version(new))
+    }
 }
 
 fn licenses_text(licenses: &[String]) -> String {
@@ -72,7 +107,7 @@ fn licenses_text(licenses: &[String]) -> String {
     } else {
         licenses
             .iter()
-            .map(|l| display(l))
+            .map(|l| text_value(l))
             .collect::<Vec<_>>()
             .join(", ")
     }
@@ -188,7 +223,7 @@ pub fn text(report: &Report) -> String {
                 out,
                 "  + {}  {}  [{}]",
                 display(&component_label(c)),
-                display(version(c.version.as_deref())),
+                text_version(c.version.as_deref()),
                 licenses_text(&c.licenses)
             );
         }
@@ -200,7 +235,7 @@ pub fn text(report: &Report) -> String {
                 out,
                 "  - {}  {}  [{}]",
                 display(&component_label(c)),
-                display(version(c.version.as_deref())),
+                text_version(c.version.as_deref()),
                 licenses_text(&c.licenses)
             );
         }
@@ -219,8 +254,8 @@ pub fn text(report: &Report) -> String {
                 out,
                 "  ~ {}  {} -> {}",
                 display(&name),
-                display(version(c.old_version.as_deref())),
-                display(version(c.new_version.as_deref()))
+                text_version(c.old_version.as_deref()),
+                text_version(c.new_version.as_deref())
             );
         }
     }
@@ -238,7 +273,7 @@ pub fn text(report: &Report) -> String {
                 out,
                 "  ! {}  {}: [{}] -> [{}]",
                 display(&name),
-                display(version(c.new_version.as_deref())),
+                text_versions(c.old_version.as_deref(), c.new_version.as_deref()),
                 licenses_text(&c.old_licenses),
                 licenses_text(&c.new_licenses)
             );
@@ -255,7 +290,7 @@ pub fn text(report: &Report) -> String {
                         format!(
                             "{} {} [{}]",
                             display(&component_label(c)),
-                            display(version(c.version.as_deref())),
+                            text_version(c.version.as_deref()),
                             licenses_text(&c.licenses)
                         )
                     })
@@ -274,7 +309,7 @@ pub fn text(report: &Report) -> String {
                 "  * {} {} {}: {}{count}",
                 side_name(w.side),
                 display(&w.identity),
-                display(version(w.version.as_deref())),
+                text_version(w.version.as_deref()),
                 w.kind.describe()
             );
         }
@@ -330,7 +365,7 @@ pub fn markdown(report: &Report) -> String {
                     out,
                     "| {} | {} | {} |",
                     markdown_code(&component_label(c)),
-                    markdown_code(version(c.version.as_deref())),
+                    md_version(c.version.as_deref()),
                     licenses_md(&c.licenses)
                 );
             }
@@ -356,8 +391,8 @@ pub fn markdown(report: &Report) -> String {
                 out,
                 "| {} | {} | {} |",
                 markdown_code(&name),
-                markdown_code(version(c.old_version.as_deref())),
-                markdown_code(version(c.new_version.as_deref()))
+                md_version(c.old_version.as_deref()),
+                md_version(c.new_version.as_deref())
             );
         }
     }
@@ -381,7 +416,7 @@ pub fn markdown(report: &Report) -> String {
                 out,
                 "| {} | {} | {} | {} |",
                 markdown_code(&name),
-                markdown_code(version(c.new_version.as_deref())),
+                md_versions(c.old_version.as_deref(), c.new_version.as_deref()),
                 licenses_md(&c.old_licenses),
                 licenses_md(&c.new_licenses)
             );
@@ -398,7 +433,7 @@ pub fn markdown(report: &Report) -> String {
                         format!(
                             "{} {}",
                             markdown_code(&component_label(c)),
-                            markdown_code(version(c.version.as_deref()))
+                            md_version(c.version.as_deref())
                         )
                     })
                     .collect::<Vec<_>>()
@@ -425,7 +460,7 @@ pub fn markdown(report: &Report) -> String {
                 "| {} | {} | {} | {}{count} |",
                 side_name(w.side),
                 markdown_code(&w.identity),
-                markdown_code(version(w.version.as_deref())),
+                md_version(w.version.as_deref()),
                 w.kind.describe()
             );
         }

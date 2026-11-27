@@ -79,6 +79,10 @@ fn sort_key(c: &Component) -> SortKey<'_> {
     )
 }
 
+fn license_displays(c: &Component) -> Vec<&str> {
+    c.licenses.iter().map(|l| l.display.as_str()).collect()
+}
+
 /// Groups components by identity key, sorted, with identical entries merged.
 fn group<'a>(
     bom: &'a Bom,
@@ -93,7 +97,13 @@ fn group<'a>(
             .push(component);
     }
     for (key, entries) in &mut groups {
-        entries.sort_by(|a, b| sort_key(a).cmp(&sort_key(b)));
+        // License display text breaks ties, so which of several merged
+        // entries is reported does not depend on input order.
+        entries.sort_by(|a, b| {
+            sort_key(a)
+                .cmp(&sort_key(b))
+                .then_with(|| license_displays(a).cmp(&license_displays(b)))
+        });
         let mut merged: Vec<(&Component, usize)> = Vec::with_capacity(entries.len());
         for entry in entries.drain(..) {
             match merged.last_mut() {

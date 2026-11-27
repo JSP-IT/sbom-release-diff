@@ -36,7 +36,7 @@
 
 | Component | Version | Old licenses | New licenses |
 |---|---|---|---|
-| ` pkg:npm/sharp ` | ` 0.33.4 ` | ` Apache-2.0 ` | ` Apache-2.0 AND LGPL-3.0-or-later ` |
+| ` pkg:npm/sharp ` | ` 0.32.6 ` -> ` 0.33.4 ` | ` Apache-2.0 ` | ` Apache-2.0 AND LGPL-3.0-or-later ` |
 
 ### Ambiguous (1)
 

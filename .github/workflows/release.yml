@@ -22,6 +22,8 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.resolve.outputs.sha }}
     steps:
       - name: Validate tag name
         env:
@@ -52,9 +54,14 @@ jobs:
             exit 1
           fi
       - name: Check out the tagged commit
+        id: resolve
         env:
           TAG: ${{ inputs.tag }}
-        run: git checkout --detach "refs/tags/${TAG}"
+        run: |
+          set -eu
+          sha="$(git rev-parse "refs/tags/${TAG}^{commit}")"
+          git checkout --detach "$sha"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -96,11 +103,12 @@ jobs:
     needs: [validate, require-draft]
     uses: ./.github/workflows/build-binaries.yml
     with:
-      ref: refs/tags/${{ inputs.tag }}
+      # Build exactly the commit that was validated, even if the tag moves.
+      ref: ${{ needs.validate.outputs.sha }}
       label: ${{ inputs.tag }}
 
   upload:
-    needs: build
+    needs: [validate, build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -114,10 +122,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ inputs.tag }}
+          VALIDATED_SHA: ${{ needs.validate.outputs.sha }}
         run: |
           set -eu
           cd dist
           sha256sum --check --strict checksums.txt
+          tag_sha="$(gh api "repos/${GH_REPO}/commits/${TAG}" --jq .sha)"
+          if [ "$tag_sha" != "$VALIDATED_SHA" ]; then
+            echo "Tag ${TAG} moved during the run (${VALIDATED_SHA} -> ${tag_sha}); refusing to upload."
+            exit 1
+          fi
           is_draft="$(gh release view "$TAG" --repo "$GH_REPO" --json isDraft --jq .isDraft)"
           if [ "$is_draft" != "true" ]; then
             echo "Refusing to upload assets to a published release."
