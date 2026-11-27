@@ -4,7 +4,7 @@ All notable changes are listed here. The project follows
 [Semantic Versioning](https://semver.org/). The JSON report has its own
 version (`report_version`); see the README.
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-11-27
 
 First release.
 
