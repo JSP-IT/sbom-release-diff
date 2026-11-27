@@ -1,0 +1,82 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-4000-8000-000000000100",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "acme-storefront",
+      "version": "1.0.0",
+      "purl": "pkg:generic/acme-storefront@1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.18.2",
+      "purl": "pkg:npm/express@4.18.2",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.20",
+      "purl": "pkg:npm/lodash@4.17.20",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "moment",
+      "version": "2.29.4",
+      "purl": "pkg:npm/moment@2.29.4",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "react",
+      "version": "18.2.0",
+      "purl": "pkg:npm/react@18.2.0",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "sharp",
+      "version": "0.32.6",
+      "purl": "pkg:npm/sharp@0.32.6",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }],
+      "components": [
+        {
+          "type": "library",
+          "name": "libvips",
+          "version": "8.14.5",
+          "purl": "pkg:generic/libvips@8.14.5",
+          "licenses": [{ "license": { "id": "LGPL-2.1-or-later" } }]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "group": "com.fasterxml.jackson.core",
+      "name": "jackson-databind",
+      "version": "2.15.2",
+      "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.15.2?type=jar",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }]
+    },
+    {
+      "type": "library",
+      "group": "com.acme",
+      "name": "acme-internal-utils",
+      "version": "2.3.0",
+      "licenses": [{ "license": { "name": "Acme Proprietary License" } }]
+    },
+    {
+      "type": "library",
+      "name": "openssl",
+      "version": "3.0.13",
+      "purl": "pkg:generic/openssl@3.0.13",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }]
+    }
+  ]
+}

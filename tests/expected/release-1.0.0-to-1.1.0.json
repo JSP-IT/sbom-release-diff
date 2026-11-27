@@ -1,0 +1,178 @@
+{
+  "report_format": "sbom-release-diff-report",
+  "report_version": 1,
+  "tool": {
+    "name": "sbom-release-diff",
+    "version": "{{TOOL_VERSION}}"
+  },
+  "old": {
+    "file": "release-1.0.0.cdx.json",
+    "spec_version": "1.5",
+    "serial_number": "urn:uuid:00000000-0000-4000-8000-000000000100",
+    "bom_version": 1,
+    "subject": {
+      "name": "acme-storefront",
+      "group": null,
+      "version": "1.0.0"
+    },
+    "component_count": 9
+  },
+  "new": {
+    "file": "release-1.1.0.cdx.json",
+    "spec_version": "1.6",
+    "serial_number": "urn:uuid:00000000-0000-4000-8000-000000000110",
+    "bom_version": 1,
+    "subject": {
+      "name": "acme-storefront",
+      "group": null,
+      "version": "1.1.0"
+    },
+    "component_count": 9
+  },
+  "summary": {
+    "added": 1,
+    "removed": 1,
+    "version_changed": 6,
+    "license_changed": 1,
+    "ambiguous": 1,
+    "unchanged": 1,
+    "warnings": 0
+  },
+  "added": [
+    {
+      "identity": "pkg:npm/zod",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "zod",
+      "group": null,
+      "version": "3.23.8",
+      "licenses": [
+        "MIT"
+      ]
+    }
+  ],
+  "removed": [
+    {
+      "identity": "pkg:npm/moment",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "moment",
+      "group": null,
+      "version": "2.29.4",
+      "licenses": [
+        "MIT"
+      ]
+    }
+  ],
+  "version_changed": [
+    {
+      "identity": "component:library/com.acme/acme-internal-utils",
+      "identity_basis": "fallback",
+      "component_type": "library",
+      "name": "acme-internal-utils",
+      "group": "com.acme",
+      "old_version": "2.3.0",
+      "new_version": "2.4.0"
+    },
+    {
+      "identity": "pkg:generic/libvips",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "libvips",
+      "group": null,
+      "old_version": "8.14.5",
+      "new_version": "8.15.2"
+    },
+    {
+      "identity": "pkg:maven/com.fasterxml.jackson.core/jackson-databind?type=jar",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "jackson-databind",
+      "group": "com.fasterxml.jackson.core",
+      "old_version": "2.15.2",
+      "new_version": "2.17.1"
+    },
+    {
+      "identity": "pkg:npm/express",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "express",
+      "group": null,
+      "old_version": "4.18.2",
+      "new_version": "4.19.2"
+    },
+    {
+      "identity": "pkg:npm/lodash",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "lodash",
+      "group": null,
+      "old_version": "4.17.20",
+      "new_version": "4.17.21"
+    },
+    {
+      "identity": "pkg:npm/sharp",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "sharp",
+      "group": null,
+      "old_version": "0.32.6",
+      "new_version": "0.33.4"
+    }
+  ],
+  "license_changed": [
+    {
+      "identity": "pkg:npm/sharp",
+      "identity_basis": "purl",
+      "component_type": "library",
+      "name": "sharp",
+      "group": null,
+      "old_version": "0.32.6",
+      "new_version": "0.33.4",
+      "old_licenses": [
+        "Apache-2.0"
+      ],
+      "new_licenses": [
+        "Apache-2.0 AND LGPL-3.0-or-later"
+      ]
+    }
+  ],
+  "ambiguous": [
+    {
+      "identity": "name:openssl",
+      "reason": "identity-basis-differs",
+      "old": [
+        {
+          "identity": "pkg:generic/openssl",
+          "identity_basis": "purl",
+          "component_type": "library",
+          "name": "openssl",
+          "group": null,
+          "version": "3.0.13",
+          "licenses": [
+            "Apache-2.0"
+          ]
+        }
+      ],
+      "new": [
+        {
+          "identity": "component:library//openssl",
+          "identity_basis": "fallback",
+          "component_type": "library",
+          "name": "openssl",
+          "group": null,
+          "version": "3.0.14",
+          "licenses": [
+            "Apache-2.0"
+          ]
+        }
+      ]
+    }
+  ],
+  "warnings": [],
+  "policy": {
+    "fail_on": [],
+    "violated": [],
+    "passed": true
+  }
+}

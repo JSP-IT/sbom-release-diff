@@ -1,0 +1,134 @@
+{
+    "components": [
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "LGPL-2.1-or-later"
+                    }
+                }
+            ],
+            "purl": "pkg:generic/libvips@8.14.5",
+            "version": "8.14.5",
+            "name": "libvips",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:generic/openssl@3.0.13",
+            "version": "3.0.13",
+            "name": "openssl",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "name": "Acme Proprietary License"
+                    }
+                }
+            ],
+            "version": "2.3.0",
+            "name": "acme-internal-utils",
+            "group": "com.acme",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.15.2?type=jar",
+            "version": "2.15.2",
+            "name": "jackson-databind",
+            "group": "com.fasterxml.jackson.core",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "purl": "pkg:npm/sharp@0.32.6",
+            "version": "0.32.6",
+            "name": "sharp",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:npm/react@18.2.0",
+            "version": "18.2.0",
+            "name": "react",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:npm/moment@2.29.4",
+            "version": "2.29.4",
+            "name": "moment",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:npm/lodash@4.17.20",
+            "version": "4.17.20",
+            "name": "lodash",
+            "type": "library"
+        },
+        {
+            "licenses": [
+                {
+                    "license": {
+                        "id": "MIT"
+                    }
+                }
+            ],
+            "purl": "pkg:npm/express@4.18.2",
+            "version": "4.18.2",
+            "name": "express",
+            "type": "library"
+        }
+    ],
+    "metadata": {
+        "component": {
+            "purl": "pkg:generic/acme-storefront@1.0.0",
+            "version": "1.0.0",
+            "name": "acme-storefront",
+            "type": "application"
+        }
+    },
+    "version": 1,
+    "serialNumber": "urn:uuid:00000000-0000-4000-8000-000000000100",
+    "specVersion": "1.5",
+    "bomFormat": "CycloneDX"
+}

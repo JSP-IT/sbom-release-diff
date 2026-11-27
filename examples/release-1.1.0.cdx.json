@@ -1,0 +1,81 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:00000000-0000-4000-8000-000000000110",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "acme-storefront",
+      "version": "1.1.0",
+      "purl": "pkg:generic/acme-storefront@1.1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.19.2",
+      "purl": "pkg:npm/express@4.19.2",
+      "licenses": [{ "license": { "id": "MIT", "acknowledgement": "declared" } }]
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/lodash@4.17.21",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "react",
+      "version": "18.2.0",
+      "purl": "pkg:npm/react@18.2.0",
+      "licenses": [{ "expression": "MIT" }]
+    },
+    {
+      "type": "library",
+      "name": "sharp",
+      "version": "0.33.4",
+      "purl": "pkg:npm/sharp@0.33.4",
+      "licenses": [{ "expression": "Apache-2.0 AND LGPL-3.0-or-later" }],
+      "components": [
+        {
+          "type": "library",
+          "name": "libvips",
+          "version": "8.15.2",
+          "purl": "pkg:generic/libvips@8.15.2",
+          "licenses": [{ "license": { "id": "LGPL-2.1-or-later" } }]
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "zod",
+      "version": "3.23.8",
+      "purl": "pkg:npm/zod@3.23.8",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "group": "com.fasterxml.jackson.core",
+      "name": "jackson-databind",
+      "version": "2.17.1",
+      "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.17.1?type=jar",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }]
+    },
+    {
+      "type": "library",
+      "group": "com.acme",
+      "name": "acme-internal-utils",
+      "version": "2.4.0",
+      "licenses": [{ "license": { "name": "Acme Proprietary License" } }]
+    },
+    {
+      "type": "library",
+      "name": "openssl",
+      "version": "3.0.14",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }]
+    }
+  ]
+}

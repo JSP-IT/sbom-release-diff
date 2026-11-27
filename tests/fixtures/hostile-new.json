@@ -1,0 +1,82 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:\u001b[31mred",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "plain",
+      "version": "1.0",
+      "purl": "pkg:npm/plain@1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "\u001b[2J\u001b]0;pwned\u0007evil\u202egnp.exe",
+      "version": "1.0\u009b31m",
+      "purl": "pkg:generic/escape@1.0?repository_url=https%3A%2F%2Fci-user%3ASECRET_TOKEN_123%40registry.example.test%2Fnpm&download_url=https%3A%2F%2Fu%3ASECRET_TOKEN_456%40dl.example.test%2Fa.tgz&mirror=https%3A%2F%2Fbob%3ASECRET_TOKEN_789%40mirror.example.test%2Fx",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "ci:token",
+          "value": "SECRET_TOKEN_000"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://ci-user:SECRET_TOKEN_123@registry.example.test/npm"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "x\nAdded (99):\n  + fake",
+      "version": "2.0"
+    },
+    {
+      "type": "library",
+      "name": "| [click](https://evil.example.test) @octocat <img src=x onerror=alert(1)> `code` **bold**",
+      "version": "3.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "<script>alert(1)</script> | x"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "long-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "version": "1.0"
+    },
+    {
+      "type": "library",
+      "name": "\u202eevil-bidi\u2066x",
+      "version": "1.0\u009b31m\u007f",
+      "licenses": [
+        {
+          "expression": "MIT\u001b[0m"
+        }
+      ]
+    }
+  ]
+}
