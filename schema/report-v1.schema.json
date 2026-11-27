@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JSP-IT/sbom-release-diff/blob/main/schema/report-v1.schema.json",
+  "title": "sbom-release-diff report, version 1",
+  "description": "JSON output of `sbom-release-diff --format json`. Within report_version 1, fields may be added but existing fields are not removed, renamed or given a new meaning. Arrays are sorted deterministically.",
+  "type": "object",
+  "required": [
+    "report_format",
+    "report_version",
+    "tool",
+    "old",
+    "new",
+    "summary",
+    "added",
+    "removed",
+    "version_changed",
+    "license_changed",
+    "ambiguous",
+    "warnings",
+    "policy"
+  ],
+  "properties": {
+    "report_format": { "const": "sbom-release-diff-report" },
+    "report_version": { "const": 1 },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "sbom-release-diff" },
+        "version": { "type": "string" }
+      }
+    },
+    "old": { "$ref": "#/$defs/document" },
+    "new": { "$ref": "#/$defs/document" },
+    "summary": {
+      "type": "object",
+      "required": [
+        "added",
+        "removed",
+        "version_changed",
+        "license_changed",
+        "ambiguous",
+        "unchanged",
+        "warnings"
+      ],
+      "properties": {
+        "added": { "$ref": "#/$defs/count" },
+        "removed": { "$ref": "#/$defs/count" },
+        "version_changed": { "$ref": "#/$defs/count" },
+        "license_changed": { "$ref": "#/$defs/count" },
+        "ambiguous": { "$ref": "#/$defs/count" },
+        "unchanged": { "$ref": "#/$defs/count" },
+        "warnings": { "$ref": "#/$defs/count" }
+      }
+    },
+    "added": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+    "removed": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+    "version_changed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "identity",
+          "identity_basis",
+          "component_type",
+          "name",
+          "group",
+          "old_version",
+          "new_version"
+        ],
+        "properties": {
+          "identity": { "type": "string" },
+          "identity_basis": { "$ref": "#/$defs/identity_basis" },
+          "component_type": { "type": "string" },
+          "name": { "type": "string" },
+          "group": { "$ref": "#/$defs/optional_string" },
+          "old_version": { "$ref": "#/$defs/optional_string" },
+          "new_version": { "$ref": "#/$defs/optional_string" }
+        }
+      }
+    },
+    "license_changed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "identity",
+          "identity_basis",
+          "component_type",
+          "name",
+          "group",
+          "old_version",
+          "new_version",
+          "old_licenses",
+          "new_licenses"
+        ],
+        "properties": {
+          "identity": { "type": "string" },
+          "identity_basis": { "$ref": "#/$defs/identity_basis" },
+          "component_type": { "type": "string" },
+          "name": { "type": "string" },
+          "group": { "$ref": "#/$defs/optional_string" },
+          "old_version": { "$ref": "#/$defs/optional_string" },
+          "new_version": { "$ref": "#/$defs/optional_string" },
+          "old_licenses": { "$ref": "#/$defs/licenses" },
+          "new_licenses": { "$ref": "#/$defs/licenses" }
+        }
+      }
+    },
+    "ambiguous": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["identity", "reason", "old", "new"],
+        "properties": {
+          "identity": {
+            "type": "string",
+            "description": "The identity key, or `name:<group>/<name>` (lowercased) for identity-basis-differs."
+          },
+          "reason": {
+            "enum": [
+              "duplicate-version-differs",
+              "multiple-candidates",
+              "identity-basis-differs"
+            ]
+          },
+          "old": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+          "new": { "type": "array", "items": { "$ref": "#/$defs/component" } }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "side", "identity", "version", "count"],
+        "properties": {
+          "kind": {
+            "enum": [
+              "duplicate-component",
+              "purl-version-mismatch",
+              "unparsed-license-expression"
+            ]
+          },
+          "side": { "enum": ["old", "new"] },
+          "identity": { "type": "string" },
+          "version": { "$ref": "#/$defs/optional_string" },
+          "count": {
+            "description": "Number of identical entries merged, for duplicate-component; otherwise null.",
+            "type": ["integer", "null"],
+            "minimum": 2
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": ["fail_on", "violated", "passed"],
+      "properties": {
+        "fail_on": { "type": "array", "items": { "$ref": "#/$defs/policy" } },
+        "violated": { "type": "array", "items": { "$ref": "#/$defs/policy" } },
+        "passed": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "optional_string": { "type": ["string", "null"] },
+    "identity_basis": { "enum": ["purl", "fallback"] },
+    "licenses": {
+      "description": "Declared licenses as written in the SBOM (license id, license name or expression), sorted by normalized form.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy": {
+      "enum": [
+        "added",
+        "removed",
+        "version-changed",
+        "license-changed",
+        "ambiguous",
+        "warning",
+        "any-change"
+      ]
+    },
+    "document": {
+      "type": "object",
+      "required": [
+        "file",
+        "spec_version",
+        "serial_number",
+        "bom_version",
+        "subject",
+        "component_count"
+      ],
+      "properties": {
+        "file": { "type": "string", "description": "File name only, without directories." },
+        "spec_version": { "enum": ["1.4", "1.5", "1.6", "1.7"] },
+        "serial_number": { "$ref": "#/$defs/optional_string" },
+        "bom_version": { "type": ["integer", "null"], "minimum": 1 },
+        "subject": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["name", "group", "version"],
+              "properties": {
+                "name": { "type": "string" },
+                "group": { "$ref": "#/$defs/optional_string" },
+                "version": { "$ref": "#/$defs/optional_string" }
+              }
+            }
+          ]
+        },
+        "component_count": { "$ref": "#/$defs/count" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": [
+        "identity",
+        "identity_basis",
+        "component_type",
+        "name",
+        "group",
+        "version",
+        "licenses"
+      ],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "description": "Version-independent key: a normalized purl without version and location qualifiers, or component:<type>/<group>/<name> (percent-encoded) when there is no purl."
+        },
+        "identity_basis": { "$ref": "#/$defs/identity_basis" },
+        "component_type": { "type": "string" },
+        "name": { "type": "string" },
+        "group": { "$ref": "#/$defs/optional_string" },
+        "version": { "$ref": "#/$defs/optional_string" },
+        "licenses": { "$ref": "#/$defs/licenses" }
+      }
+    }
+  }
+}
