@@ -4,6 +4,38 @@ Releases are cut from `main`. Release binaries are built by the
 **Release binaries** workflow, which only uploads assets to an existing
 **draft** release and never publishes it. Nothing is published to crates.io.
 
+## Repository protections
+
+Two rulesets (Settings → Rules → Rulesets) protect the release path. Neither
+has bypass actors, so the rules also apply to repository admins.
+
+**Protect main** (the default branch):
+
+- Changes land only through pull requests, and every review thread must be
+  resolved before merging. No approving review is required, because the
+  repository has a single maintainer account, which cannot approve its own
+  pull requests.
+- Force pushes and deleting the branch are blocked.
+- These CI checks must pass before merging: `fmt and Clippy`,
+  `dependency licenses and advisories`, `binaries / checksums`, and
+  `test (<os>, <toolchain>)` for `ubuntu-latest`, `windows-latest` and
+  `macos-latest` with `stable` and `1.85`.
+
+Required checks are matched by job name. If you rename a CI job or change the
+test matrix (for example when raising the MSRV), update the ruleset in the
+same change. Otherwise pull requests wait forever for a check that no longer
+runs.
+
+**Protect release tags** (`refs/tags/v*`):
+
+- Release tags can be created, but not moved, force-pushed or deleted. A tag
+  therefore always points at the commit the release workflow validated and
+  built.
+- If a tag is pushed on the wrong commit, it cannot be fixed in place. If no
+  release has been published for it, an admin can temporarily disable the
+  ruleset, delete the tag and turn the ruleset back on. Once a release is
+  published, cut a new patch version instead.
+
 ## Labels and release notes
 
 Label every pull request before merging. GitHub groups the generated release
@@ -30,9 +62,12 @@ A change to the meaning or shape of an existing JSON report field needs a new
 1. Update `version` in `Cargo.toml` (and `Cargo.lock` with `cargo update -p
    sbom-release-diff`), move the `CHANGELOG.md` entry from "unreleased" to
    the release date, and write `RELEASE_NOTES_vX.Y.Z.md`. Merge the release
-   pull request into `main` after CI passes and a maintainer has reviewed it.
+   pull request into `main` once a maintainer has reviewed it; the ruleset
+   blocks the merge until the required checks pass.
 2. Tag the merge commit and push the tag. A draft release does not create its
-   tag, so the tag must exist before the workflow runs:
+   tag, so the tag must exist before the workflow runs. Check the commit
+   first: release tags cannot be moved or deleted once pushed (see
+   [Repository protections](#repository-protections)).
 
    ```sh
    git switch main
