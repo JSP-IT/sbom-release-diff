@@ -1,0 +1,7 @@
+sbom-release-diff
+Copyright 2026 JSP-IT
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Release archives also contain THIRD-PARTY-LICENSES.txt with the license texts
+of the Rust crates compiled into the binary.

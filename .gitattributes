@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.json text eol=lf
+# Byte-exact fixtures: never rewrite their encoding or line endings.
+tests/fixtures/invalid/** -text
