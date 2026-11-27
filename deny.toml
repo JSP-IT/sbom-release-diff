@@ -1,0 +1,29 @@
+# cargo-deny configuration: https://embarkstudios.github.io/cargo-deny/
+# Run locally with `cargo deny check`. See docs/dependencies.md for the review.
+
+[graph]
+all-features = true
+
+[advisories]
+# Any advisory (vulnerability, unmaintained, unsound, yanked) fails the check.
+yanked = "deny"
+
+[licenses]
+# Permissive licenses compatible with distributing this crate under Apache-2.0.
+# Add a license here only after reviewing it (and record it in docs/dependencies.md).
+allow = [
+    "Apache-2.0",
+    "MIT",
+    "Unicode-3.0",
+    "Unlicense",
+]
+confidence-threshold = 0.93
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
